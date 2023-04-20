@@ -1,0 +1,32 @@
+name: 01-history
+
+on:
+  push:
+    paths:
+    - '.github/workflows/01-history.yml'
+    - '01-history-of-modern-computer/**'
+
+env:
+  DEPENDENCIES:
+    texlive-latex-base
+    texlive-latex-extra
+    texlive-latex-recommended
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Packages
+      run: sudo apt-get install $DEPENDENCIES
+    - name: Run pdflatex
+      working-directory: 01-history-of-modern-computer/
+      run: |
+        pdflatex presentation.tex
+        pdflatex presentation.tex
+    - name: Store pdf
+      uses: actions/upload-artifact@v3
+      with:
+        name: presentation
+        path: 01-history-of-modern-computer/presentation.pdf
